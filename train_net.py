@@ -22,15 +22,15 @@ from xview2 import XView2Dataset
 from utils import safe_mkdir
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--config_path', type=str, default="",
-                    help='the location of the data folder')
-parser.add_argument('--data_dir', type=str, required=True, default="./Dataset/xView2/v2",
-                    help='the location of the data folder')
+parser.add_argument('--data_dir', type=str, required=True, default="",
+                    help='path the data folder')
+parser.add_argument('--config_path', type=str, default="configs/dual-hrnet.yaml",
+                    help='path of model config(ex:.yaml')
+parser.add_argument("--ckpt_save_dir", type=str, default='ckpt/dual-hrnet/',
+                    help='path to save checkpoints')
 parser.add_argument('--test', type=str, required=False,
                     help='testing the model')
 parser.add_argument("--local_rank", type=int, default=0)
-parser.add_argument("--ckpt_save_dir", type=str, required=True, default='',
-                    help='path to save checkpoints')
 
 args = parser.parse_args()
 

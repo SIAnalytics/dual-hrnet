@@ -751,7 +751,9 @@ class DualHRNet(nn.Module):
         x_pre_list = self.loc_net.stage4(x_pre_list)
         x_post_list = self.cls_net.stage4(x_post_list)
 
-        gc.collect()
+        if not self.training:
+            gc.collect()
+
         if self.is_split_loss:
             # Upsampling
             x_pre = self._upsampling(x_pre_list, self.fpn_loc)
@@ -761,18 +763,23 @@ class DualHRNet(nn.Module):
             x_pre_list = self._forward_fuse_layer(x_cat_list, self.fuse_last)
             x_pre = self._upsampling(x_pre_list, self.fpn_loc)
 
-        torch.save(x_post, 'x_post.ph')
-        del x_pre_list
-        del x_post_list
-        del x_post
-        gc.collect()
+        # to avoid shortage of memory due to "docker run --memory=8g"
+        if not self.training:
+            torch.save(x_post, 'x_post.ph')
+            del x_pre_list
+            del x_post_list
+            del x_post
+            gc.collect()
+
         # Last layer
         loc = self.loc_net.last_layer(x_pre)
 
         if self.is_split_loss:
-            del x_pre
-            gc.collect()
-            x_post = torch.load('x_post.ph')
+            if not self.training:
+                del x_pre
+                gc.collect()
+                x_post = torch.load('x_post.ph')
+
             cls = self.cls_net.last_layer(x_post)
         else:
             cls = None

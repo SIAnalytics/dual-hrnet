@@ -65,7 +65,7 @@ class XView2Dataset(Dataset):
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ])
 
-    def add_samples_train(self, img_dirs, lab_dirs, imgs, labs, class_name):
+    def add_samples_train(self, img_dirs, lab_dirs, imgs, labs):
         for pre in os.listdir(img_dirs):
             if pre[-17:] != '_pre_disaster.png':
                 continue
@@ -83,22 +83,7 @@ class XView2Dataset(Dataset):
                      'post_img': os.path.join(img_dirs, post),
                      'pre_json': os.path.join(lab_dirs, pre_json),
                      'post_json': os.path.join(lab_dirs, post_json)}
-            if class_name is None:
-                self.sample_files.append(files)
-            else:
-                post_json = json.loads(open(files['post_json']).read())
-                buildings = self._get_building_from_json(post_json)
-
-                if buildings:
-                    is_pos_sample = False
-                    for building in buildings.values():
-                        if building['subtype'] == class_name:
-                            is_pos_sample = True
-                            break
-                    if is_pos_sample:
-                        self.sample_files.append(files)
-                    else:
-                        self.neg_sample_files.append(files)
+            self.sample_files.append(files)
 
     def get_sample_info(self, idx):
         files = self.sample_files[idx]
