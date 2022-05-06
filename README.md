@@ -72,6 +72,10 @@ python test_net.py --config_file configs/dual-hrnet.yaml \
                    --ckpt_path=PATH_TO_LOAD_CHECKPOINTS
 ````
 
+## Trained model weight 
+- config: [dual-hrnet.yaml](configs/dual-hrnet.yaml)
+- weight: [weight.pth](https://drive.google.com/file/d/1wB8I8zw9tQ8adiBBGS5wdHBh2XGf9bck/view?usp=sharing)
+
 ## License
 Dual-HRNet is released under the [MIT license](LICENSE).
 
